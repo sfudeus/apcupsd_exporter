@@ -1,12 +1,14 @@
 ARG GO_VERSION=1.22
-FROM golang:${GO_VERSION} AS builder
+FROM --platform=${BUILDPLATFORM} golang:${GO_VERSION} AS builder
+ARG TARGETARCH
+ARG TARGETOS
 
 WORKDIR /build
 ADD . /build
 
 ENV CGO_ENABLED=0
 RUN go get -u
-RUN go build -o /build/apcupsd_exporter /build/cmd/apcupsd_exporter/main.go
+RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -o /build/apcupsd_exporter /build/cmd/apcupsd_exporter/main.go
 #RUN go install github.com/mdlayher/apcupsd_exporter@main
 #RUN go build -o /build/apcupsd_exporter $GOPATH/src/github.com/mdlayher/apcupsd_exporter/cmd/apcupsd_exporter/main.go
 
