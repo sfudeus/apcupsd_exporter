@@ -2,12 +2,13 @@ ARG GO_VERSION=1.22
 FROM golang:${GO_VERSION} AS builder
 
 WORKDIR /build
-#ADD . /build
+ADD . /build
 
 ENV CGO_ENABLED=0
-#RUN go build -o /build/apcupsd_exporter /build/cmd/apcupsd_exporter/main.go
-RUN go get -u github.com/mdlayher/apcupsd_exporter
-RUN go build -o /build/apcupsd_exporter $GOPATH/src/github.com/mdlayher/apcupsd_exporter/cmd/apcupsd_exporter/main.go
+RUN go get -u
+RUN go build -o /build/apcupsd_exporter /build/cmd/apcupsd_exporter/main.go
+#RUN go install github.com/mdlayher/apcupsd_exporter@main
+#RUN go build -o /build/apcupsd_exporter $GOPATH/src/github.com/mdlayher/apcupsd_exporter/cmd/apcupsd_exporter/main.go
 
 FROM scratch
 COPY --from=builder /build/apcupsd_exporter /apcupsd_exporter
