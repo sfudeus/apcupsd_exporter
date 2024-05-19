@@ -1,0 +1,11 @@
+name: Docker Build/Publish Release
+on:
+  push:
+    branches:
+    - "build"
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    uses: sfudeus/workflows/.github/workflows/docker-build-publish-branch.yaml@main
+    secrets: inherit
